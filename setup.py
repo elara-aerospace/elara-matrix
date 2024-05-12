@@ -36,7 +36,7 @@ setuptools.setup(
     description="Python-powered trajectory simulation for Elara Aerospace Rocketry.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.comelara-aerospace/rocket-simulations",
+    url="https://github.com/elara-aerospace/rocket-simulations",
     packages=setuptools.find_packages(),
     python_requires=">=3.8",
 )
