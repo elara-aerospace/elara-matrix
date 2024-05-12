@@ -1,1 +1,5 @@
+# Microsoft Visual Studio
 .vs
+
+# Jupyter Notebook
+.ipynb_checkpoints
