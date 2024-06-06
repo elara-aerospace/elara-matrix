@@ -44,7 +44,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-""" Disable specific pylint checks"""
+# Disable specific pylint checks
 # pylint: disable-msg=C0103
 # pylint: disable-msg=C0114
 # pylint: disable-msg=C0301
