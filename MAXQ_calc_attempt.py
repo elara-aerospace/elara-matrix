@@ -39,9 +39,14 @@ a2 will result in v2 and h2 and the cycle repeats
 and the smaller dt is, the more precice the calculation gets.
 """
 
+""" Disable specific pylint checks"""
 # pylint: disable-msg=C0103
 # pylint: disable-msg=C0301
 # pylint: disable-msg=W0621
+# pylint: disable-msg=R1720
+# pylint: disable-msg=R1705
+# pylint: disable-msg=C0114
+# pylint: disable-msg=W1514
 
 import math
 import numpy as np
