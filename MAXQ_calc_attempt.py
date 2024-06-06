@@ -1,18 +1,42 @@
 """
 Attempt to calculate altitude, velocity and dynamic pressure of a rocket in an interative system
 
-This code uses the thrust force T, air resistance Fd and gravity to calculate the trajectory over a given time of a rocket.
-For the Air resistance I used the atmosphereic model from NASA https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/earth-atmosphere-equation-metric/
-The used drac coeefcient is that of a cone. I dont know ours yet nor do i know how i evolves over density and velocity changes.
+This code uses the thrust force T, air resistance Fd and gravity
+to calculate the trajectory over a given time of a rocket.
+
+For the Air resistance I used the atmosphereic model from NASA
+https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/earth-atmosphere-equation-metric/
+
+The used drac coefficent is that of a cone.
+I dont know ours yet nor do i know how i evolves over density and velocity changes.
+
 This model has no calculation for lift forces
-The coordinate system is a x-y-z System but we only look at the x-z Plane. x horizontal, z vertical
-mx_k is a matrix with k1 and k1 as factors on it diagonal. they are trig-functions. at the moment you can plug in an angle of 0° - 90°
-0° would mean the rocket starts vertical, and 90° would mean a horizontal start, wich obv. makes no sense.
-in the mx_k def is teh facto f which will be a function in the future to make the rocket start vertically and then let it change its angle over time
-the base formual is a*m = T - m*g - Fd which is a differential equation. This skript is an attempt to bypass the need of solving this equation
-m is a constat function of time. so we have a = T/m - g - Fd/m . a*dt with dt beeing really small we get a velocity, wich we add on our initial velocity
-so we have a1 wich leads to dv1 so we have v0 + dv1 = v1. v1*dt = dh1 and h0 + dh1 = h1. a1, v1 and h1 are the new values for the next calulation, wich will-
--result in a2. a2 will result in v2 and h2 and the cycle repeats. and the smaller dt is, the more precice the calculation gets.
+
+The coordinate system is a x-y-z System but we only look at the x-z Plane.
+x = horizontal, z = vertical
+
+mx_k is a matrix with k1 and k1 as factors on it diagonal. They are trig-functions.
+
+At the moment you can plug in an angle of 0° - 90°
+
+0° would mean the rocket starts vertical, and 90° would mean a horizontal start,
+wich obv. makes no sense.
+
+in the mx_k def is teh facto f which will be a function in the future
+to make the rocket start vertically and then let it change its angle over time
+the base formual is a*m = T - m*g - Fd which is a differential equation.
+
+This skript is an attempt to bypass the need of solving this equation
+m is a constat function of time. so we have a = T/m - g - Fd/m .
+
+a*dt with dt beeing really small we get a velocity, wich we add on our initial velocity
+so we have a1 wich leads to dv1 so we have v0 + dv1 = v1.
+
+v1*dt = dh1 and h0 + dh1 = h1. a1, v1 and h1 are the new values for the next calulation,
+which will result in a2.
+
+a2 will result in v2 and h2 and the cycle repeats
+and the smaller dt is, the more precice the calculation gets.
 """
 
 import math
