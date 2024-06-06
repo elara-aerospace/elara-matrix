@@ -39,6 +39,10 @@ a2 will result in v2 and h2 and the cycle repeats
 and the smaller dt is, the more precice the calculation gets.
 """
 
+# pylint: disable-msg=C0103
+# pylint: disable-msg=C0301
+# pylint: disable-msg=W0621
+
 import math
 import numpy as np
 import pandas as pd
