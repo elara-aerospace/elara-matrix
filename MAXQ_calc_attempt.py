@@ -44,6 +44,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+
 # ------------------------------------------------------------------------------------------------------------------------------------------------
 #                                                                   Formulas
 # ------------------------------------------------------------------------------------------------------------------------------------------------
@@ -51,7 +52,7 @@ import matplotlib.pyplot as plt
 
 def area(radius):
     """Calculate the cross-section area of the rocket."""
-    return math.pi * radius**2
+    return math.pi * radius ** 2
 
 
 def mass_over_time(mass, fuel_consumption, time):
@@ -85,7 +86,7 @@ def density(height):
 
 def dynamic_pressure(density_value, velocity):
     """Calculate the dynamic pressure in Pa = N/m^2."""
-    return 0.5 * density_value * velocity**2
+    return 0.5 * density_value * velocity ** 2
 
 
 def air_resistance(dynamic_pressure, drag_coefficient, area):
@@ -125,6 +126,7 @@ def sign(value):
         return -1
     else:
         raise ValueError("Error: issue with sign function")
+
 
 # ------------------------------------------------------------------------------------------------------------------------------------------------
 #                                                                   Values
@@ -209,7 +211,8 @@ while time < max_time:
     gravity_vector = np.array([[0], [current_gravity]])
     acceleration_drag_vector = np.array([[acceleration_drag], [acceleration_drag]])
 
-    velocity_change_vector = time_step_matrix @ (rotation_matrix(time) @ (acceleration_thrust_vector - sign_matrix @ acceleration_drag_vector) - gravity_vector)
+    velocity_change_vector = time_step_matrix @ (rotation_matrix(time) @ (
+            acceleration_thrust_vector - sign_matrix @ acceleration_drag_vector) - gravity_vector)
 
     dv = velocity_change_vector[1, 0]
 
