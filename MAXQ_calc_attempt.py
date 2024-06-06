@@ -25,100 +25,99 @@ import matplotlib.pyplot as plt
 # ------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-def A(r):  # crossection area of the rocket
-    return PI * r**2
+def area(radius):
+    """Calculate the cross-section area of the rocket."""
+    return math.pi * radius**2
 
 
-def mt(
-    m, U, t
-):  # the mass over time. wett mass minus fuel consumption multiplyed by time
-    return m - U * t
+def mass_over_time(mass, fuel_consumption, time):
+    """Calculate the mass over time, considering fuel consumption."""
+    return mass - fuel_consumption * time
 
 
-def d(h):  # air (d)ensity
-    if h < 0:
-        raise ValueError("error: negative h-value")
+def density(height):
+    """Calculate the air density based on the height."""
+    if height < 0:
+        raise ValueError("Error: negative height value")
 
-    elif 0 <= h < 11000:  # Troposphere
-        T = 15.04 - 0.00649 * h + 273.1
-        p = 101.29 * (T / 288.08) ** 5.256
+    elif 0 <= height < 11000:  # Troposphere
+        temp = 15.04 - 0.00649 * height + 273.1
+        pressure = 101.29 * (temp / 288.08) ** 5.256
 
-    elif 11000 <= h < 25000:  # Lower Stratosphere
-        T = -56.46 + 273.1
-        p = 22.65 * math.exp(1.73 - 0.000157 * h)
+    elif 11000 <= height < 25000:  # Lower Stratosphere
+        temp = -56.46 + 273.1
+        pressure = 22.65 * math.exp(1.73 - 0.000157 * height)
 
-    elif h >= 25000:  # Upper Stratosphere
-        T = -131.21 + 0.00299 * h + 273.1
-        p = 2.488 * (T / 216.6) ** (-11.388)
+    elif height >= 25000:  # Upper Stratosphere
+        temp = -131.21 + 0.00299 * height + 273.1
+        pressure = 2.488 * (temp / 216.6) ** (-11.388)
 
     else:
-        raise ValueError("error: h-value out of range")
+        raise ValueError("Error: height value out of range")
 
-    d = p / (0.2869 * T)  # density in kg/m^3
-    return d
-
-
-def q(d, v):  # dynamic pressure in Pa = N/m^2
-    return 0.5 * d * v**2
+    density_value = pressure / (0.2869 * temp)  # density in kg/m^3
+    return density_value
 
 
-def Fd(
-    q, Cd, A
-):  # Air resistance. F = 1/2 * Cd * A * d(density) * v^2. Because 1/2 * d * v^2 is q we can substitude it
-    return q * A * Cd
+def dynamic_pressure(density_value, velocity):
+    """Calculate the dynamic pressure in Pa = N/m^2."""
+    return 0.5 * density_value * velocity**2
 
 
-def T(t):  # Thrust over time. Burnout after 76s after Launch
-    if t <= 76:
-        T = 28000
+def air_resistance(dynamic_pressure, drag_coefficient, area):
+    """Calculate the air resistance. F = 1/2 * Cd * A * d(density) * v^2. Because 1/2 * d * v^2 is q, we can substitute it."""
+    return dynamic_pressure * area * drag_coefficient
+
+
+def thrust(time):
+    """Calculate the thrust over time. Burnout after 76s after Launch."""
+    if time <= 76:
+        return 28000
     else:
-        T = 0
-    return T
+        return 0
 
 
-def g(
-    h,
-):  # graviataion factor/ the big number is a factor. Mass of earth and G. The constant is choosen so at h_0, g(h) = g_0
-    g = 398184378.21 / (6371 + (h / 1000)) ** 2
-    return g
+def gravity(height):
+    """Calculate the gravitational factor/the big number is a factor. Mass of earth and G. The constant is chosen so that at h_0, g(h) = g_0."""
+    return 398184378.21 / (6371 + (height / 1000)) ** 2
 
 
-def mx_k(t):
-    f = 0 * t + 0.01745329 * 1
-    k1 = np.cos(PI / 2 - f)
-    k2 = np.sin(PI / 2 - f)
-    k = np.array([[k1, 0], [0, k2]])
-    return k
+def rotation_matrix(time):
+    """Calculate the rotation matrix for the rocket's angle."""
+    angle = 0 * time + 0.01745329 * 1  # Angle in radians
+    k1 = np.cos(math.pi / 2 - angle)
+    k2 = np.sin(math.pi / 2 - angle)
+    rotation_matrix = np.array([[k1, 0], [0, k2]])
+    return rotation_matrix
 
 
-def sgn(x):
-    if x == 0:
-        s = 0
-    elif x > 0:
-        s = 1
-    elif x < 0:
-        s = -1
+def sign(value):
+    """Calculate the sign of a value."""
+    if value == 0:
+        return 0
+    elif value > 0:
+        return 1
+    elif value < 0:
+        return -1
     else:
-        raise ValueError("error: issue with sgn-function")
-    return s
-
+        raise ValueError("Error: issue with sign function")
 
 # ------------------------------------------------------------------------------------------------------------------------------------------------
 #                                                                   Values
 # ------------------------------------------------------------------------------------------------------------------------------------------------
 
-Cd = 0.5  # no unit
-R = 0.225  # m
-t_0 = 0  # s
-v_0 = 0  # m/s
-h_0 = 0
-x_0 = 0  # m
-t_e = 76  # s
-Thrust_const = 28000  # N
-m_w = 1000  # kg
-U = 9.32454  # kg/s
-g_0 = 9.81  # m/s^2
-c = 331  # m/s
+DRAG_COEFFICIENT = 0.5  # no unit
+RADIUS = 0.225  # m
+INITIAL_TIME = 0  # s
+INITIAL_VELOCITY = 0  # m/s
+INITIAL_HEIGHT = 0
+INITIAL_DISTANCE = 0  # m
+BURNOUT_TIME = 76  # s
+THRUST_CONSTANT = 28000  # N
+INITIAL_MASS = 1000  # kg
+FUEL_CONSUMPTION = 9.32454  # kg/s
+GRAVITATIONAL_ACCELERATION = 9.81  # m/s^2
+SPEED_OF_SOUND = 331  # m/s
 PI = round(np.pi, 6)
 
 # ------------------------------------------------------------------------------------------------------------------------------------------------
@@ -127,103 +126,101 @@ PI = round(np.pi, 6)
 
 altitude = []
 distance = []
-dynamic_pressure = []
-drag = []
-time = []
-velocity = []
-mach = []
-thrust = []
-geo_pot = []
+dynamic_pressure_values = []
+drag_values = []
+time_values = []
+velocity_values = []
+mach_numbers = []
+thrust_values = []
+gravitational_potential = []
 
-t = t_0
-vec_xh = np.array([[x_0], [h_0]])
-vx = v_0
-vz = v_0
-v_vector = np.array([[vx], [vz]])
+time = INITIAL_TIME
+position_vector = np.array([[INITIAL_DISTANCE], [INITIAL_HEIGHT]])
+vx = INITIAL_VELOCITY
+vz = INITIAL_VELOCITY
+velocity_vector = np.array([[vx], [vz]])
 dt = 0.001
-mx_dt = np.array([[dt, 0], [0, dt]])
+time_step_matrix = np.array([[dt, 0], [0, dt]])
 dv = 0
-mx_sgn = np.array([[sgn(dv), 0], [0, sgn(dv)]])
+sign_matrix = np.array([[sign(dv), 0], [0, sign(dv)]])
 
-t_max = 750
+max_time = 750
 
-while t < t_max:
+while time < max_time:
 
-    # base values
-    x = vec_xh[0, 0]
-    h = vec_xh[1, 0]
-    v = (v_vector[0, 0] ** 2 + v_vector[1, 0] ** 2) ** 0.5
+    # Base values
+    x_position = position_vector[0, 0]
+    height = position_vector[1, 0]
+    velocity = (velocity_vector[0, 0] ** 2 + velocity_vector[1, 0] ** 2) ** 0.5
 
-    # check
-    if t > 0.01 * t_max:
-        if h <= 0:
+    # Check
+    if time > 0.01 * max_time:
+        if height <= 0:
             break
 
-    mh = v / c
-    m_t = mt(m_w, U, t)
-    T_t = T(t)
-    q_t = q(d(h), v)
-    Fd_t = Fd(q_t, Cd, A(R))
+    mach_number = velocity / SPEED_OF_SOUND
+    current_mass = mass_over_time(INITIAL_MASS, FUEL_CONSUMPTION, time)
+    current_thrust = thrust(time)
+    current_dynamic_pressure = dynamic_pressure(density(height), velocity)
+    current_drag = air_resistance(current_dynamic_pressure, DRAG_COEFFICIENT, area(RADIUS))
 
-    # accelerations
-    g_t = g(h)
-    a_th = T_t / m_t
-    a_Fd = Fd_t / m_t
+    # Accelerations
+    current_gravity = gravity(height)
+    acceleration_thrust = current_thrust / current_mass
+    acceleration_drag = current_drag / current_mass
 
-    # lists for evaluation
-    time.append(t)
-    thrust.append(T_t)
-    altitude.append(round(h, 5))
-    distance.append(round(x, 5))
-    velocity.append(round(v, 5))
-    mach.append(round(mh, 3))
-    dynamic_pressure.append(round(q_t, 5))
-    drag.append(round(Fd_t, 5))
-    geo_pot.append(round(g_t, 5))
+    # Lists for evaluation
+    time_values.append(time)
+    thrust_values.append(current_thrust)
+    altitude.append(round(height, 5))
+    distance.append(round(x_position, 5))
+    velocity_values.append(round(velocity, 5))
+    mach_numbers.append(round(mach_number, 3))
+    dynamic_pressure_values.append(round(current_dynamic_pressure, 5))
+    drag_values.append(round(current_drag, 5))
+    gravitational_potential.append(round(current_gravity, 5))
 
-    # vectors
-    vec_ath = np.array([[a_th], [a_th]])
+    # Vectors
+    acceleration_thrust_vector = np.array([[acceleration_thrust], [acceleration_thrust]])
+    gravity_vector = np.array([[0], [current_gravity]])
+    acceleration_drag_vector = np.array([[acceleration_drag], [acceleration_drag]])
 
-    vec_g = np.array([[0], [g_t]])
+    velocity_change_vector = time_step_matrix @ (rotation_matrix(time) @ (acceleration_thrust_vector - sign_matrix @ acceleration_drag_vector) - gravity_vector)
 
-    vec_aFd = np.array([[a_Fd], [a_Fd]])
+    dv = velocity_change_vector[1, 0]
 
-    vec_dv = mx_dt @ (mx_k(t) @ (vec_ath - mx_sgn @ vec_aFd) - vec_g)
+    velocity_vector = velocity_vector + velocity_change_vector
 
-    dv = vec_dv[1, 0]
+    position_change_vector = time_step_matrix @ velocity_vector
 
-    v_vector = v_vector + vec_dv
+    position_vector = position_vector + position_change_vector
 
-    vec_dxdh = mx_dt @ v_vector
-
-    vec_xh = vec_xh + vec_dxdh
-
-    # time iteration
-    t = t + dt
+    # Time iteration
+    time = time + dt
 
 # ------------------------------------------------------------------------------------------------------------------------------------------------
 #                                                                   Evaluation
 # ------------------------------------------------------------------------------------------------------------------------------------------------
 
-# generates a tabula which shows all calculated values at a whole sec (a whole sec is 1s, 2s, 3s and not 2.001s or 3.278s)
-df = pd.DataFrame(
-    {
-        "time": time,
-        "thrust": thrust,
-        "h": altitude,
-        "v": velocity,
-        "mach": mach,
-        "g": geo_pot,
-        "q": dynamic_pressure,
-        "D": drag,
-    }
-)
+# Generate a table showing all calculated values at whole seconds
+data = {
+    "time": time_values,
+    "thrust": thrust_values,
+    "height": altitude,
+    "velocity": velocity_values,
+    "mach": mach_numbers,
+    "gravity": gravitational_potential,
+    "dynamic_pressure": dynamic_pressure_values,
+    "drag": drag_values,
+}
+
+df = pd.DataFrame(data)
 
 pd.set_option("display.max_rows", None)
 
 df_filtered = df[df.index % 10000 == 0].reset_index(drop=True)
 
-max_values = df[["h", "v", "mach", "q", "D"]].max().to_frame().T
+max_values = df[["height", "velocity", "mach", "dynamic_pressure", "drag"]].max().to_frame().T
 # max_values['time'] = 'max'
 
 print(df_filtered)
@@ -240,19 +237,19 @@ plt.axis("equal")
 plt.grid(True)
 
 plt.subplot(3, 2, 2)
-plt.plot(time, altitude, marker=".", linestyle="-")
+plt.plot(time_values, altitude, marker=".", linestyle="-")
 plt.title("Altitude vs Time")
 plt.xlabel("Time (s)")
 plt.ylabel("Altitude (m)")
 
 plt.subplot(3, 2, 4)
-plt.plot(time, dynamic_pressure, marker=".", linestyle="-")
+plt.plot(time_values, dynamic_pressure_values, marker=".", linestyle="-")
 plt.title("Dynamic Pressure vs Time")
 plt.xlabel("Time (s)")
 plt.ylabel("Dynamic Pressure (Pa)")
 
 plt.subplot(3, 2, 6)
-plt.plot(time, drag, marker=".", linestyle="-")
+plt.plot(time_values, drag_values, marker=".", linestyle="-")
 plt.title("Drag vs Time")
 plt.xlabel("Time (s)")
 plt.ylabel("Drag (N)")
