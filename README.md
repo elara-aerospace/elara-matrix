@@ -1,4 +1,6 @@
 # Elara Aerospace - Rocket Flight Simulation
+[![CodeFactor](https://www.codefactor.io/repository/github/elara-aerospace/elara-matrix/badge)](https://www.codefactor.io/repository/github/elara-aerospace/elara-matrix)
+
 > Python-powered trajectory simulation for Elara Aerospace Rocketry
 
 This repository contains the simulation program for Elara Aerospace's rocket tests.
