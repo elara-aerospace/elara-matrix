@@ -3,6 +3,6 @@ pytest-coverage
 black[jupyter]
 flake8-black
 pandas
-numericalunits==1.25
+numericalunits==1.26
 pylint
 isort
